@@ -1,0 +1,6 @@
+@DotNetAI_HostAddress = http://localhost:8080
+
+GET {{DotNetAI_HostAddress}}/scalar/v1
+Accept: application/json
+
+###
