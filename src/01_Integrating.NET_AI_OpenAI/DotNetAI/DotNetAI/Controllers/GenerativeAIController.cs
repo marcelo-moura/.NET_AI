@@ -18,10 +18,24 @@ namespace DotNetAI.Controllers
         {
             if (string.IsNullOrWhiteSpace(prompt))
             {
-                return BadRequest("Prompt cannot be empty.");
+                return BadRequest("The 'prompt' parameter is required and cannot be empty.");
             }
 
             var response = await _chatService.GetResponseAsync(prompt);
+
+            return Ok(response);
+        }
+
+        [HttpGet("ask-ai-options")]
+        public async Task<IActionResult> AskAiWithOptions([FromQuery] string prompt)
+        {
+            if (string.IsNullOrWhiteSpace(prompt))
+            {
+                return BadRequest("The 'prompt' parameter is required and cannot be empty.");
+            }
+
+            var response = await _chatService.GetResponseWithOptionsAsync(prompt);
+
             return Ok(response);
         }
     }
