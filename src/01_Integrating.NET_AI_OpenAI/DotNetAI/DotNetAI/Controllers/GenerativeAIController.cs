@@ -8,11 +8,13 @@ namespace DotNetAI.Controllers
     {
         private readonly ChatService _chatService;
         private readonly RecipeService _recipeService;
+        private readonly ImageService _imageService;
 
-        public GenerativeAIController(ChatService chatService, RecipeService recipeService)
+        public GenerativeAIController(ChatService chatService, RecipeService recipeService, ImageService imageService)
         {
             _chatService = chatService;
             _recipeService = recipeService;
+            _imageService = imageService;
         }
 
         [HttpGet("ask-ai")]
@@ -55,6 +57,24 @@ namespace DotNetAI.Controllers
             var recipe = await _recipeService.GenerateRecipe(ingredients, cuisine, dietaryRestrictions);
 
             return Ok(recipe);
+        }
+
+        [HttpGet("generate-image")]
+        public async Task<IActionResult> GenerateImage(
+            [FromQuery] string prompt,
+            [FromQuery] string quality = "hd",
+            [FromQuery] int n = 1,
+            [FromQuery] int height = 1024,
+            [FromQuery] int width = 1024)
+        {
+            if (string.IsNullOrWhiteSpace(prompt))
+            {
+                return BadRequest("The 'prompt' parameter is required and cannot be empty.");
+            }
+
+            var imageUrls = await _imageService.GenerateImage(prompt, quality, n, height, width);
+
+            return Ok(imageUrls);
         }
     }
 }
