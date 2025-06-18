@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DotNetAI.Controllers
 {
     [ApiController]
+    [Route("ai")]
     public class GenerativeAIController : ControllerBase
     {
         private readonly ChatService _chatService;

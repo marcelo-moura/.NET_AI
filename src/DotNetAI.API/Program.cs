@@ -1,3 +1,4 @@
+using DotNetAI.API.Service;
 using DotNetAI.Extensions;
 using DotNetAI.Service;
 using Scalar.AspNetCore;
@@ -11,6 +12,7 @@ builder.AddOpenAI();
 builder.Services.AddSingleton<ChatService>();
 builder.Services.AddSingleton<RecipeService>();
 builder.Services.AddSingleton<ImageService>();
+builder.Services.AddSingleton<TranscriptionService>();
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 {
