@@ -16,30 +16,44 @@ namespace DotNetAI.Service
 
         public async Task<string> GetResponseAsync(string prompt)
         {
-            var chatClient = _openAIClient.GetChatClient(_model);
-            var response = await chatClient.CompleteChatAsync(prompt);
+            try
+            {
+                var chatClient = _openAIClient.GetChatClient(_model);
+                var response = await chatClient.CompleteChatAsync(prompt);
 
-            return response.Value.Content[^1].Text ?? "No response for OpenAI.";
+                return response.Value.Content[^1].Text ?? "No response for OpenAI.";
+            }
+            catch (Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
         }
 
         public async Task<string> GetResponseWithOptionsAsync(string prompt)
         {
-            var chatClient = _openAIClient.GetChatClient(_model);
-
-            var messages = new List<ChatMessage>
+            try
             {
-                new UserChatMessage(prompt)
-            };
+                var chatClient = _openAIClient.GetChatClient(_model);
 
-            var options = new ChatCompletionOptions
+                var messages = new List<ChatMessage>
+                {
+                    new UserChatMessage(prompt)
+                };
+
+                var options = new ChatCompletionOptions
+                {
+                    Temperature = 0.4f,
+                    MaxOutputTokenCount = 200
+                };
+
+                var response = await chatClient.CompleteChatAsync(messages, options);
+
+                return response.Value.Content[^1].Text ?? "No response for OpenAI.";
+            }
+            catch (Exception ex)
             {
-                Temperature = 0.4f,
-                MaxOutputTokenCount = 200
-            };
-
-            var response = await chatClient.CompleteChatAsync(messages, options);
-
-            return response.Value.Content[^1].Text ?? "No response for OpenAI.";
+                return $"Error: {ex.Message}";
+            }
         }
     }
 }
